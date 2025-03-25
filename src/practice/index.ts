@@ -1,241 +1,181 @@
-// TypeScript Practice Exercises
-// Import the projects data from projects.ts to solve these exercises
+// TypeScript Workshop: Historic Computing Projects
+// This workshop contains exercises to practice TypeScript with data about historical computing projects.
 
-import { projects } from './data/projects';
+// Type Definitions (assuming these are in the types.ts file)
+
+import type { Project, Person } from '../types';
 import { people } from './data/people';
-import type { Person, Project } from '../types';
-// ==================================================
-// BASICS EXERCISES
-// ==================================================
+import { projects } from './data/projects';
 
-// Exercise 1: Check if a project is over budget
-// Create a function that takes a project and returns a message about its budget status
-function checkProjectBudget(project: Project): string {
-  // Your code here:
-  // 1. Calculate if the project is over budget (spent > allocated)
-  // 2. Return an appropriate message using string templates
-  // 3. Include the project name, budget info, and status in the message
-  
-  return ''; // Replace with your solution
+// =========================================================================
+// Exercise 1: Filter projects that are over budget
+// =========================================================================
+/**
+ * This function should return projects where the spent amount exceeds the allocated budget
+ * @param projects Array of projects to analyze
+ * @returns Array of projects that are over budget
+ */
+function getOverBudgetProjects(projects: Project[]): Project[] {
+  // TODO: Implement this function
+  // Hint: Use the filter method to find projects where budget.spent > budget.allocated
+  return [];
 }
 
-// Exercise 2: Calculate the time a project has been running
-// For completed projects, calculate the duration; for ongoing projects, calculate time until today
-function calculateProjectDuration(project: Project): string {
-  // Your code here:
-  // 1. Check if the project has an end date
-  // 2. Calculate the appropriate duration in years and months
-  // 3. Return a formatted string with the result
-  
-  return ''; // Replace with your solution
+// Test Exercise 1
+console.log('===== Exercise 1: Over Budget Projects =====');
+const overBudgetProjects = getOverBudgetProjects(projects);
+console.log(overBudgetProjects.map(project => project.name));
+// Expected output should include "Apollo Guidance Computer" and "World Wide Web"
+
+
+// =========================================================================
+// Exercise 2: Sort projects using a function as argument
+// =========================================================================
+/**
+ * This function should sort projects based on a provided sorting function
+ * @param projects Array of projects to sort
+ * @param sortFn Function that takes two projects and returns a number for sorting
+ * @returns Sorted array of projects
+ */
+function sortProjects(projects: Project[], sortFn: (a: Project, b: Project) => number): Project[] {
+  // TODO: Implement this function
+  // Hint: Use the sort method and the provided sortFn
+  return [];
 }
 
-// ==================================================
-// FUNCTIONS EXERCISES
-// ==================================================
+// Test Exercise 2
+console.log('===== Exercise 2: Sorted Projects =====');
 
-// Exercise 3: Create a higher-order function for project filtering
-// This function should return another function that filters projects by status
-type ProjectFilter = (projects: Project[]) => Project[];
+// Sort by start date (oldest first)
+const byStartDate = (a: Project, b: Project): number => a.startDate.getTime() - b.startDate.getTime();
+const chronologicalProjects = sortProjects(projects, byStartDate);
+console.log(chronologicalProjects.map(project => `${project.name} (${project.startDate.getFullYear()})`));
 
-function createStatusFilter(status: Project['status']): ProjectFilter {
-  // Your code here:
-  // Return a function that filters projects by the given status
-  
-  return projects => []; // Replace with your solution
-}
+// Sort by budget (highest first)
+const byBudgetHighToLow = (a: Project, b: Project): number => b.budget.allocated - a.budget.allocated;
+const highBudgetProjects = sortProjects(projects, byBudgetHighToLow);
+console.log(highBudgetProjects.map(project => `${project.name} (${project.budget.allocated} ${project.budget.currency})`));
 
-// Exercise 4: Create a function that takes a sorter function as a parameter
-// The function should sort projects based on the provided sorting logic
-type ProjectSorter = (a: Project, b: Project) => number;
 
-function sortProjects(projects: Project[], sorter: ProjectSorter): Project[] {
-  // Your code here:
-  // Use the sorter function to sort and return a new array of projects
-  
-  return []; // Replace with your solution
-}
-
-// ==================================================
-// OBJECTS EXERCISES
-// ==================================================
-
-// Exercise 5: Create a ProjectSummary type and a function to generate summaries
-type ProjectSummary = {
-    id: number;
-    name: string;
-    status: Project['status'];
-    completionPercentage: number;
-    contributorCount: number;
-    totalBudget: number;
-    currencyCode: string;
-};
-
-function createProjectSummary(project: Project): ProjectSummary {
-  // Your code here:
-  // Create and return a ProjectSummary from a Project
-  
-  return {} as ProjectSummary; // Replace with your solution
-}
-
-// Exercise 6: Create a function that finds the lead contributor of a project
+// =========================================================================
+// Exercise 3: Find lead contributor
+// =========================================================================
+/**
+ * This function should find the Person object for the lead contributor of a project
+ * @param project The project to find the lead contributor for
+ * @param people Array of people to search within
+ * @returns The Person object of the lead contributor or undefined if not found
+ */
 function findLeadContributor(project: Project, people: Person[]): Person | undefined {
-  // Your code here:
-  // 1. Check if the project has a leadContributor property
-  // 2. Find and return the Person object that matches the leadContributor id
-  
-  return undefined; // Replace with your solution
+  // TODO: Implement this function
+  // Hint: Use find method to locate the person with id matching project.leadContributor
+  return undefined;
 }
 
-// ==================================================
-// ARRAYS EXERCISES
-// ==================================================
+// Test Exercise 3
+console.log('===== Exercise 3: Lead Contributors =====');
+projects.forEach(project => {
+  const leader = findLeadContributor(project, people);
+  console.log(`${project.name} - Lead: ${leader?.name || 'Unknown'}`);
+});
 
-// Exercise 7: Use array methods to analyze project data
-function analyzeProjects(projects: Project[]): {
-  totalBudget: number;
-  averageSpent: number;
-  statusCounts: Record<Project['status'], number>;
-  tagFrequency: Record<string, number>;
-} {
-  // Your code here:
-  // 1. Calculate the total allocated budget across all projects
-  // 2. Calculate the average amount spent
-  // 3. Count projects by status
-  // 4. Count frequency of each tag
+
+// =========================================================================
+// Exercise 4: Create collaboration project by merging two projects
+// =========================================================================
+/**
+ * This function should create a new collaboration project by merging two existing projects
+ * @param project1 First project to merge
+ * @param project2 Second project to merge
+ * @param newId ID for the new collaboration project
+ * @returns A new Project object representing the collaboration
+ */
+function createCollaborationProject(project1: Project, project2: Project, newId: number): Project {
+  // TODO: Implement this function
+  // Hints:
+  // - Combine names with "Collaboration: [project1] + [project2]"
+  // - Merge descriptions
+  // - Use the earlier start date of the two projects
+  // - Combine unique contributors (avoid duplicates)
+  // - Set status to "Planning"
+  // - Add budgets together (assuming same currency)
+  // - Combine unique tags
+  // - Set lead contributor to project1's lead
   
   return {
-    totalBudget: 0,
-    averageSpent: 0,
-    statusCounts: {} as Record<Project['status'], number>,
-    tagFrequency: {}
-  }; // Replace with your solution
+    id: newId,
+    name: '', // TODO: Implement
+    description: '', // TODO: Implement
+    startDate: new Date(), // TODO: Use earlier date
+    contributors: [], // TODO: Combine unique contributors
+    status: 'Planning',
+    budget: {
+      allocated: 0, // TODO: Sum allocated budgets
+      spent: 0, // TODO: Sum spent amounts
+      currency: '' // TODO: Use currency from project1 (assume same currency)
+    },
+    tags: [], // TODO: Combine unique tags
+    leadContributor: 0 // TODO: Use project1's lead
+  };
 }
 
-// Exercise 8: Find projects where a person is a contributor
-function findPersonProjects(personId: number, projects: Project[]): Project[] {
-  // Your code here:
-  // Use array methods to find all projects where the person with this ID is a contributor
-  
-  return []; // Replace with your solution
+// Test Exercise 4
+console.log('===== Exercise 4: Collaboration Project =====');
+const turingMeetsWeb = createCollaborationProject(
+  projects.find(p => p.id === 104)!, // Turing Machine
+  projects.find(p => p.id === 105)!, // World Wide Web
+  200
+);
+console.log(turingMeetsWeb);
+
+
+// =========================================================================
+// Exercise 5: Create project summary using destructuring
+// =========================================================================
+interface ProjectSummary {
+  title: string;
+  yearStarted: number;
+  duration: number | 'Ongoing';
+  teamSize: number;
+  leadName: string;
+  isComplete: boolean;
+  budgetStatus: 'Under Budget' | 'On Budget' | 'Over Budget';
+  technologies: string[];
 }
 
-// ==================================================
-// DESTRUCTURING EXERCISES
-// ==================================================
+/**
+ * This function should create a summary of a project using object destructuring
+ * @param project The project to summarize
+ * @param people The array of people to find the lead's name
+ * @returns A ProjectSummary object
+ */
+function createProjectSummary(project: Project, people: Person[]): ProjectSummary {
+  // TODO: Implement this function using destructuring
+  // Hints:
+  // - Use object destructuring to extract properties from project
+  // - Calculate derived values like duration, budgetStatus
+  // - Find the lead's name using the people array
 
-// Exercise 9: Print a project report using destructuring
-function printProjectReport(project: Project): string {
-  // Your code here:
-  // 1. Use destructuring to extract project properties
-  // 2. Use nested destructuring for the budget
-  // 3. Return a formatted report string
-  
-  return ''; // Replace with your solution
+  return {
+    title: '',
+    yearStarted: 0,
+    duration: 0,
+    teamSize: 0,
+    leadName: '',
+    isComplete: false,
+    budgetStatus: 'On Budget',
+    technologies: []
+  };
 }
 
-// Exercise 10: Function that takes destructured parameters
-function updateProjectStatus({
-  id,
-  status,
-  newStatus,
-  date
-}: {
-  id: number;
-  status: Project['status'];
-  newStatus: Project['status'];
-  date: Date;
-}): string {
-  // Your code here:
-  // Return a status update message using the destructured parameters
-  
-  return ''; // Replace with your solution
-}
-
-// ==================================================
-// SPREAD OPERATIONS EXERCISES
-// ==================================================
-
-// Exercise 11: Merge multiple projects into a collaboration project
-function createCollaborationProject(
-  name: string, 
-  description: string, 
-  ...projectsToMerge: Project[]
-): Project {
-  // Your code here:
-  // 1. Create a new project object
-  // 2. Combine contributors from all projects (avoid duplicates)
-  // 3. Sum up budgets
-  // 4. Merge tags (avoid duplicates)
-  
-  return {} as Project; // Replace with your solution
-}
-
-// Exercise 12: Update a project immutably (as you would in React)
-function updateProjectImmutably(
-  project: Project, 
-  updates: Partial<Project>
-): Project {
-  // Your code here:
-  // Create a new project with the updates applied without modifying the original
-  // Handle nested objects like budget correctly
-  
-  return {} as Project; // Replace with your solution
-}
-
-// ==================================================
-// BONUS CHALLENGES
-// ==================================================
-
-// Challenge 1: Create a Timeline type and generate project timelines
-type TimelineEvent = {
-  date: Date;
-  projectId: number;
-  projectName: string;
-  event: string;
-};
-
-function generateTimeline(projects: Project[]): TimelineEvent[] {
-  // Your code here:
-  // Create timeline events for project start and end dates
-  // Sort them chronologically
-  
-  return []; // Replace with your solution
-}
-
-// Challenge 2: Implement a project search function with multiple criteria
-type SearchCriteria = {
-  term?: string;
-  status?: Project['status'];
-  minBudget?: number;
-  maxBudget?: number;
-  tag?: string;
-  contributorId?: number;
-  startAfter?: Date;
-  startBefore?: Date;
-};
-
-function searchProjects(projects: Project[], criteria: SearchCriteria): Project[] {
-  // Your code here:
-  // Implement a flexible search function that filters projects based on the provided criteria
-  
-  return []; // Replace with your solution
-}
-
-// Export the exercises functions for testing
-export {
-  checkProjectBudget,
-  calculateProjectDuration,
-  createStatusFilter,
-  sortProjects,
-  createProjectSummary,
-  findLeadContributor,
-  analyzeProjects,
-  findPersonProjects,
-  printProjectReport,
-  updateProjectStatus,
-  createCollaborationProject,
-  updateProjectImmutably,
-  generateTimeline,
-  searchProjects
-};
+// Test Exercise 5
+console.log('===== Exercise 5: Project Summaries =====');
+projects.forEach(project => {
+  const summary = createProjectSummary(project, people);
+  console.log(`${summary.title} (${summary.yearStarted}):`);
+  console.log(`  Led by ${summary.leadName}, team of ${summary.teamSize}`);
+  console.log(`  Duration: ${summary.duration === 'Ongoing' ? 'Ongoing' : summary.duration + ' years'}`);
+  console.log(`  Status: ${summary.isComplete ? 'Complete' : 'Not Complete'}, ${summary.budgetStatus}`);
+  console.log(`  Technologies: ${summary.technologies.join(', ')}`);
+  console.log();
+});
