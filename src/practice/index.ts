@@ -1,8 +1,9 @@
 // TypeScript Practice Exercises
 // Import the projects data from projects.ts to solve these exercises
 
-import { people, projects, type Person, type Project } from './data';
-
+import { projects } from './data/projects';
+import { people } from './data/people';``
+import type { Person, Project } from '../types';
 // ==================================================
 // BASICS EXERCISES
 // ==================================================
